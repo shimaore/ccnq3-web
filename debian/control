@@ -1,0 +1,7 @@
+Source: ccnq3-web
+Maintainer: Stephane Alnet (Packaging) <stephane@shimaore.net>
+
+Package: ccnq3-web
+Architecture: all
+Depends: ccnq3
+Description: Web applications for CCNQ3
