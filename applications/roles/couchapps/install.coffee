@@ -13,9 +13,6 @@ ccnq3.config (config) ->
   usercode_uri = config.usercode.couchdb_uri
   push_script usercode_uri, 'usercode'
 
-  # this is for applications/voicemail
-  push_script usercode_uri, 'voicemail'
-
   update = (uri) ->
     # Set the security object for the _users source database.
     users = pico uri
