@@ -121,6 +121,12 @@ do (jQuery) ->
         value: @monitor?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.host + '/monitor') # FIXME
 
       textbox
+        id:'amqp_uri'
+        title: 'RabbitMQ URI (AMQP)'
+        class:'required url'
+        value: @amqp_uri ? ('amqp:' + window.location.host) # FIXME
+
+      textbox
         id:'interfaces.primary.ipv4'
         title:'Primary IPv4'
         class:'ipv4'
@@ -269,6 +275,23 @@ do (jQuery) ->
 
         field.host_couchdb_uri = u[1] + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + u[2]
 
+      rewrite_amqp_uri = (doc) ->
+        username = host_username doc.host
+        password = doc.password
+
+        u = doc.amqp_uri.match ///
+            ^
+            (amqp:)
+            (?:[^@]*@)?
+            (.*)
+          ///i
+
+        unless u
+          alert 'Invalid AMQP URL'
+          return
+
+        doc.amqp_uri = u[1] + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + u[2]
+
       initialize_password = (doc) ->
         ###
           Password creation for host@#{hostname}
@@ -284,6 +307,7 @@ do (jQuery) ->
 
         rewrite_host_couchdb_uri doc, doc.provisioning
         rewrite_host_couchdb_uri doc, doc.logging
+        rewrite_amqp_uri doc
 
       model.extend
         beforeSave: (doc) ->
@@ -348,6 +372,7 @@ do (jQuery) ->
           else
             rewrite_host_couchdb_uri doc, doc.provisioning
             rewrite_host_couchdb_uri doc, doc.logging
+            rewrite_amqp_uri doc
 
           return doc
 
